@@ -1,0 +1,110 @@
+.tiptap.ProseMirror {
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  p > img {
+    display: inline-block;
+  }
+
+  > img:not([data-type="emoji"] img) {
+    margin: 2rem 0;
+    outline: 0.125rem solid transparent;
+    border-radius: var(--tt-radius-xs, 0.25rem);
+  }
+
+  img:not([data-type="emoji"] img).ProseMirror-selectednode {
+    outline-color: var(--tt-brand-color-500);
+  }
+
+  // Resizable image with caption
+  figure.resizable-image {
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .resizable-image-frame {
+      position: relative;
+      max-width: 100%;
+      line-height: 0;
+
+      img {
+        margin: 0;
+        max-width: 100%;
+        height: auto;
+        border-radius: var(--tt-radius-xs, 0.25rem);
+        outline: 0.125rem solid transparent;
+      }
+    }
+
+    &.is-selected .resizable-image-frame img {
+      outline-color: var(--tt-brand-color-500);
+    }
+
+    // Drag handle (bottom-right corner) — visible on hover/selection
+    .resizable-image-handle {
+      position: absolute;
+      right: -5px;
+      bottom: -5px;
+      width: 14px;
+      height: 14px;
+      border-radius: 9999px;
+      background: var(--tt-brand-color-500, #aa3bff);
+      border: 2px solid var(--white, #fff);
+      cursor: nwse-resize;
+      opacity: 0;
+      transition: opacity 0.12s ease;
+      z-index: 5;
+    }
+
+    &:hover .resizable-image-handle,
+    &.is-selected .resizable-image-handle {
+      opacity: 1;
+    }
+
+    figcaption {
+      margin-top: 0.5rem;
+      width: 100%;
+      max-width: 100%;
+      text-align: center;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      color: var(--tt-gray-light-a-600, #71717a);
+
+      .dark & {
+        color: var(--tt-gray-dark-a-600, #a1a1aa);
+      }
+    }
+
+    .resizable-image-caption-input {
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      text-align: center;
+      font: inherit;
+      color: inherit;
+
+      &::placeholder {
+        color: var(--tt-gray-light-a-400, #c4c4cc);
+      }
+    }
+  }
+
+  // Thread image handling
+  .planet-thread:has(> img) {
+    margin: 2rem 0;
+
+    img {
+      outline: 0.125rem solid transparent;
+      border-radius: var(--tt-radius-xs, 0.25rem);
+    }
+  }
+
+  .planet-thread img {
+    margin: 0;
+  }
+}

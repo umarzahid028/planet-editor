@@ -1,0 +1,19 @@
+@import './styles/_variables.scss';
+@import './styles/_keyframe-animations.scss';
+
+/*
+ * The Simple Editor template owns its layout and typography in
+ * simple-editor.scss. Keep this file minimal — only a base reset — so the
+ * default Vite landing-page styles don't fight the editor (which caused the
+ * editor to be capped to a centered 1126px column with centered text).
+ */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  min-height: 100svh;
+}

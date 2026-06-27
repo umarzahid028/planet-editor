@@ -1,0 +1,299 @@
+// Design tokens + keyframes. Imported here so the published library ships them
+// in its own styles.css — the dev app and web-component load these via
+// index.css, but the npm lib build only pulls in this stylesheet.
+@import "../../../styles/variables";
+@import "../../../styles/keyframe-animations";
+
+// Fonts are intentionally NOT loaded from a remote CDN so the editor works
+// fully offline. The font-family declarations below fall back to the system
+// UI font. To use Inter / DM Sans, self-host the .woff2 files and @font-face
+// them here.
+
+body {
+  --tt-toolbar-height: 44px;
+  --tt-theme-text: var(--tt-gray-light-900);
+
+  .dark & {
+    --tt-theme-text: var(--tt-gray-dark-900);
+  }
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  color: var(--tt-theme-text);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  padding: 0;
+  overscroll-behavior-y: none;
+}
+
+html,
+body {
+  overscroll-behavior-x: none;
+}
+
+html,
+body,
+#root,
+#app {
+  height: 100%;
+  background-color: var(--tt-bg-color);
+}
+
+::-webkit-scrollbar {
+  width: 0.25rem;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--tt-scrollbar-color) transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--tt-scrollbar-color);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tiptap.ProseMirror {
+  font-family: "DM Sans", sans-serif;
+}
+
+.simple-editor-wrapper {
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+}
+
+.simple-editor-content {
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.simple-editor-content .tiptap.ProseMirror.simple-editor {
+  flex: 1;
+  padding: 3rem 3rem 30vh;
+}
+
+@media screen and (max-width: 480px) {
+  .simple-editor-content .tiptap.ProseMirror.simple-editor {
+    padding: 1rem 1.5rem 30vh;
+  }
+}
+
+.tiptap.ProseMirror {
+  table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    margin: 1.25rem 0;
+    overflow: hidden;
+
+    td,
+    th {
+      border: 1px solid var(--tt-gray-light-a-300, #d4d4d8);
+      box-sizing: border-box;
+      min-width: 1em;
+      padding: 0.4rem 0.6rem;
+      position: relative;
+      vertical-align: top;
+
+      > * {
+        margin-bottom: 0;
+      }
+    }
+
+    th {
+      background-color: var(--tt-gray-light-a-100, #f4f4f5);
+      font-weight: 600;
+      text-align: left;
+    }
+
+    .selectedCell::after {
+      background: var(--tt-brand-color-100, rgba(170, 59, 255, 0.15));
+      content: "";
+      inset: 0;
+      pointer-events: none;
+      position: absolute;
+      z-index: 2;
+    }
+
+    .column-resize-handle {
+      background-color: var(--tt-brand-color-500, #aa3bff);
+      bottom: -2px;
+      pointer-events: none;
+      position: absolute;
+      right: -2px;
+      top: 0;
+      width: 3px;
+    }
+  }
+
+  .tableWrapper {
+    margin: 1.25rem 0;
+    overflow-x: auto;
+  }
+
+  &.resize-cursor {
+    cursor: ew-resize;
+  }
+}
+
+.dark .tiptap.ProseMirror table {
+  td,
+  th {
+    border-color: var(--tt-gray-dark-a-300, #3f3f46);
+  }
+
+  th {
+    background-color: var(--tt-gray-dark-a-100, #27272a);
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   Optional line-number gutter (code-editor style).
+   Off by default; enabled via the `lineNumbers` prop (React) or the
+   `line-numbers` attribute (web component), which sets data-line-numbers="true"
+   on the wrapper. Numbers EVERY visual row (wrapped lines included) — the row
+   positions are measured in JS (see use-line-numbers.ts) and rendered into the
+   `.planet-line-gutter` overlay below. Zero-padded, monospace, with a divider.
+---------------------------------------------------------------------------- */
+.simple-editor-wrapper[data-line-numbers="true"] {
+  // gutter geometry
+  --planet-gutter-width: 4.75rem;
+  position: relative;
+
+  // reserve space on the left of the content for the gutter + divider
+  .tiptap.ProseMirror.simple-editor {
+    position: relative;
+    padding-left: var(--planet-gutter-width);
+  }
+
+  // vertical divider between the gutter and the content
+  .tiptap.ProseMirror.simple-editor::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--planet-gutter-width) - 1rem);
+    width: 1px;
+    background-color: var(--tt-gray-light-a-200);
+    pointer-events: none;
+  }
+}
+
+/* JS-positioned number overlay. `left` (editor edge) and each number's `top`
+   are set inline from measurements. */
+.planet-line-gutter {
+  position: absolute;
+  top: 0;
+  width: 3rem;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+.planet-line-number {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  text-align: right;
+  font-family: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: var(--tt-gray-light-a-400);
+}
+
+.dark .simple-editor-wrapper[data-line-numbers="true"]
+  .tiptap.ProseMirror.simple-editor::before {
+  background-color: var(--tt-gray-dark-a-200);
+}
+
+.dark .planet-line-number {
+  color: var(--tt-gray-dark-a-400);
+}
+
+/* ----------------------------------------------------------------------------
+   Search (find-in-document): match highlights + floating search bar.
+---------------------------------------------------------------------------- */
+.simple-editor-wrapper {
+  position: relative;
+}
+
+/* highlight for every match */
+.tiptap.ProseMirror .planet-search-match {
+  background-color: var(--tt-brand-color-200);
+  border-radius: 2px;
+}
+
+/* the currently-focused match */
+.tiptap.ProseMirror .planet-search-match--current {
+  background-color: var(--tt-brand-color-400);
+  box-shadow: 0 0 0 1px var(--tt-brand-color-500);
+}
+
+.planet-search-bar {
+  position: absolute;
+  top: calc(var(--tt-toolbar-height, 44px) + 0.5rem);
+  right: 1rem;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+  padding: 0.25rem 0.375rem;
+  background-color: #fff;
+  border: 1px solid var(--tt-gray-light-a-200);
+  border-radius: 0.625rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+
+  .dark & {
+    background-color: #1c1c1f;
+    border-color: var(--tt-gray-dark-a-200);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  }
+}
+
+.planet-search-input {
+  width: 12rem;
+  border: 0;
+  outline: none;
+  background: transparent;
+  padding: 0.25rem 0.4rem;
+  font-size: 0.875rem;
+  color: var(--tt-theme-text);
+
+  &::placeholder {
+    color: var(--tt-gray-light-a-400);
+  }
+  .dark &::placeholder {
+    color: var(--tt-gray-dark-a-400);
+  }
+}
+
+.planet-search-count {
+  min-width: 2.75rem;
+  padding: 0 0.25rem;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  color: var(--tt-gray-light-a-500);
+
+  .dark & {
+    color: var(--tt-gray-dark-a-500);
+  }
+}
+
+.planet-search-case {
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1;
+}
