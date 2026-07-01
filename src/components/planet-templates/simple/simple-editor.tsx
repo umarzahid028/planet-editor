@@ -18,11 +18,12 @@ import { Selection } from "@/planet-core/extensions"
 
 // --- UI Primitives ---
 import { Button } from "@/components/planet-ui-primitive/button"
-import { Spacer } from "@/components/planet-ui-primitive/spacer"
 import {
   Toolbar,
   ToolbarGroup,
   ToolbarSeparator,
+  ToolbarOverflow,
+  type ToolbarSection,
 } from "@/components/planet-ui-primitive/toolbar"
 
 // --- Planet Node ---
@@ -99,99 +100,106 @@ const MainToolbarContent = ({
   onToggleLineNumbers: () => void
   onSearchClick: () => void
 }) => {
-  return (
-    <>
-      <Spacer />
+  const sections: ToolbarSection[] = [
+    {
+      key: "history",
+      node: (
+        <>
+          <UndoRedoButton action="undo" />
+          <UndoRedoButton action="redo" />
+          <Button
+            variant="ghost"
+            onClick={onSearchClick}
+            aria-label="Search"
+            title="Search (⌘F)"
+          >
+            <SearchIcon className="planet-button-icon" />
+          </Button>
+        </>
+      ),
+    },
+    {
+      key: "blocks",
+      node: (
+        <>
+          <HeadingDropdownMenu modal={false} levels={[1, 2, 3, 4]} />
+          <FontSizeDropdownMenu />
+          <ListDropdownMenu
+            modal={false}
+            types={["bulletList", "orderedList", "taskList"]}
+          />
+          <BlockquoteButton />
+          <CodeBlockButton />
+        </>
+      ),
+    },
+    {
+      key: "marks",
+      node: (
+        <>
+          <MarkButton type="bold" />
+          <MarkButton type="italic" />
+          <MarkButton type="strike" />
+          <MarkButton type="code" />
+          <MarkButton type="underline" />
+          {!isMobile ? (
+            <ColorHighlightPopover />
+          ) : (
+            <ColorHighlightPopoverButton onClick={onHighlighterClick} />
+          )}
+          {!isMobile ? <LinkPopover /> : <LinkButton onClick={onLinkClick} />}
+        </>
+      ),
+    },
+    {
+      key: "script",
+      node: (
+        <>
+          <MarkButton type="superscript" />
+          <MarkButton type="subscript" />
+        </>
+      ),
+    },
+    {
+      key: "align",
+      node: (
+        <>
+          <TextAlignButton align="left" />
+          <TextAlignButton align="center" />
+          <TextAlignButton align="right" />
+          <TextAlignButton align="justify" />
+        </>
+      ),
+    },
+    {
+      key: "image",
+      node: <ImageUploadButton text="Add" />,
+    },
+    {
+      key: "table",
+      node: <TableDropdownMenu />,
+    },
+    {
+      key: "view",
+      node: (
+        <>
+          <Button
+            variant="ghost"
+            data-active-state={lineNumbersActive ? "on" : "off"}
+            onClick={onToggleLineNumbers}
+            aria-pressed={lineNumbersActive}
+            aria-label="Toggle line numbers"
+            title="Line numbers"
+          >
+            <LineNumbersIcon className="planet-button-icon" />
+          </Button>
+          <ThemeToggle />
+        </>
+      ),
+    },
+  ]
 
-      <ToolbarGroup>
-        <UndoRedoButton action="undo" />
-        <UndoRedoButton action="redo" />
-        <Button
-          variant="ghost"
-          onClick={onSearchClick}
-          aria-label="Search"
-          title="Search (⌘F)"
-        >
-          <SearchIcon className="planet-button-icon" />
-        </Button>
-      </ToolbarGroup>
-
-      <ToolbarSeparator />
-
-      <ToolbarGroup>
-        <HeadingDropdownMenu modal={false} levels={[1, 2, 3, 4]} />
-        <FontSizeDropdownMenu />
-        <ListDropdownMenu
-          modal={false}
-          types={["bulletList", "orderedList", "taskList"]}
-        />
-        <BlockquoteButton />
-        <CodeBlockButton />
-      </ToolbarGroup>
-
-      <ToolbarSeparator />
-
-      <ToolbarGroup>
-        <MarkButton type="bold" />
-        <MarkButton type="italic" />
-        <MarkButton type="strike" />
-        <MarkButton type="code" />
-        <MarkButton type="underline" />
-        {!isMobile ? (
-          <ColorHighlightPopover />
-        ) : (
-          <ColorHighlightPopoverButton onClick={onHighlighterClick} />
-        )}
-        {!isMobile ? <LinkPopover /> : <LinkButton onClick={onLinkClick} />}
-      </ToolbarGroup>
-
-      <ToolbarSeparator />
-
-      <ToolbarGroup>
-        <MarkButton type="superscript" />
-        <MarkButton type="subscript" />
-      </ToolbarGroup>
-
-      <ToolbarSeparator />
-
-      <ToolbarGroup>
-        <TextAlignButton align="left" />
-        <TextAlignButton align="center" />
-        <TextAlignButton align="right" />
-        <TextAlignButton align="justify" />
-      </ToolbarGroup>
-
-      <ToolbarSeparator />
-
-      <ToolbarGroup>
-        <ImageUploadButton text="Add" />
-      </ToolbarGroup>
-
-      <ToolbarSeparator />
-
-      <ToolbarGroup>
-        <TableDropdownMenu />
-      </ToolbarGroup>
-
-      <Spacer />
-
-      {isMobile && <ToolbarSeparator />}
-
-      <ToolbarGroup>
-        <Button
-          variant="ghost"
-          data-active-state={lineNumbersActive ? "on" : "off"}
-          onClick={onToggleLineNumbers}
-          aria-pressed={lineNumbersActive}
-          aria-label="Toggle line numbers"
-          title="Line numbers"
-        >
-          <LineNumbersIcon className="planet-button-icon" />
-        </Button>
-        <ThemeToggle />
-      </ToolbarGroup>
-    </>
-  )
+  return <ToolbarOverflow sections={sections} />
 }
 
 const MobileToolbarContent = ({
@@ -223,6 +231,9 @@ const MobileToolbarContent = ({
   </>
 )
 
+/** The live Tiptap editor instance created by SimpleEditor. */
+export type PlanetEditorInstance = NonNullable<ReturnType<typeof useEditor>>
+
 export interface SimpleEditorProps {
   /** Initial content as HTML string or Planet JSON. Defaults to demo content. */
   content?: string | Record<string, unknown>
@@ -230,6 +241,11 @@ export interface SimpleEditorProps {
   editable?: boolean
   /** Called on every change with both HTML and JSON representations. */
   onChange?: (value: { html: string; json: Record<string, unknown> }) => void
+  /**
+   * Fired once the editor instance is ready. Use it to run commands on the
+   * editor from outside — e.g. `editor.chain().focus().insertContent("...").run()`.
+   */
+  onEditorReady?: (editor: PlanetEditorInstance) => void
   /**
    * Image upload handler. Receives the picked File and resolves to a URL/src.
    * Defaults to an offline base64 (data URL) handler. Pass your own to upload
@@ -257,6 +273,7 @@ function SimpleEditorInner({
   content: contentProp,
   editable = true,
   onChange,
+  onEditorReady,
   uploadImage,
   lineNumbers = false,
 }: SimpleEditorProps) {
@@ -320,6 +337,11 @@ function SimpleEditorInner({
     ],
     content: contentProp ?? content,
   })
+
+  // Expose the editor instance to the consumer once it's ready.
+  useEffect(() => {
+    if (editor) onEditorReady?.(editor)
+  }, [editor, onEditorReady])
 
   const rect = useCursorVisibility({
     editor,

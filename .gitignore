@@ -15,6 +15,9 @@ dist-ssr
 # Build artifacts / packed tarballs
 *.tgz
 
+# Local project notes / context (not for the public repo)
+PROJECT_CONTEXT.md
+
 # Local Claude Code settings
 .claude/settings.local.json
 
