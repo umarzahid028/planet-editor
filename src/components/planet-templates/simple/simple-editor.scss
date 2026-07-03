@@ -1,8 +1,8 @@
 // Design tokens + keyframes. Imported here so the published library ships them
 // in its own styles.css — the dev app and web-component load these via
 // index.css, but the npm lib build only pulls in this stylesheet.
-@import "../../../styles/variables";
-@import "../../../styles/keyframe-animations";
+@use "../../../styles/variables";
+@use "../../../styles/keyframe-animations";
 
 // Fonts are intentionally NOT loaded from a remote CDN so the editor works
 // fully offline. The font-family declarations below fall back to the system
