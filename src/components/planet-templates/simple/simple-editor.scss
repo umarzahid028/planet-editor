@@ -19,7 +19,7 @@ body {
 }
 
 body {
-  font-family: "Inter", sans-serif;
+  font-family: "Open Sans", "Segoe UI", Roboto, Arial, sans-serif;
   color: var(--tt-theme-text);
   font-optical-sizing: auto;
   font-weight: 400;
@@ -60,7 +60,19 @@ body,
 }
 
 .tiptap.ProseMirror {
-  font-family: "DM Sans", sans-serif;
+  font-family: "Open Sans", "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+// Document-variable tokens ([type:id]) highlighted as clay code chips by the
+// TokenHighlightExtension. Colour + background only — font stays Open Sans.
+.tiptap.ProseMirror .planet-token {
+  background: #f6e7df;
+  color: #8f4326;
+  border: 1px solid #efd6c9;
+  border-radius: 6px;
+  padding: 1px 6px;
+  font-size: 0.95em;
+  white-space: nowrap;
 }
 
 .simple-editor-wrapper {

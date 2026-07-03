@@ -30,6 +30,7 @@ import {
 import { ImageUploadNode } from "@/components/planet-node/image-upload-node/image-upload-node-extension"
 import { HorizontalRule } from "@/components/planet-node/horizontal-rule-node/horizontal-rule-node-extension"
 import { SearchExtension } from "@/components/planet-extension/search-extension"
+import { TokenHighlightExtension } from "@/components/planet-extension/token-highlight-extension"
 import "@/components/planet-node/blockquote-node/blockquote-node.scss"
 import "@/components/planet-node/code-block-node/code-block-node.scss"
 import "@/components/planet-node/horizontal-rule-node/horizontal-rule-node.scss"
@@ -334,6 +335,7 @@ function SimpleEditorInner({
         onError: (error) => console.error("Upload failed:", error),
       }),
       SearchExtension,
+      TokenHighlightExtension,
     ],
     content: contentProp ?? content,
   })
