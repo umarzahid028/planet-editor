@@ -63,7 +63,7 @@ body,
   font-family: "Open Sans", "Segoe UI", Roboto, Arial, sans-serif;
 }
 
-// Document-variable tokens ([type:id]) highlighted as clay code chips by the
+// Document-variable tokens ({{key}}) highlighted as clay code chips by the
 // TokenHighlightExtension. Colour + background only — font stays Open Sans.
 .tiptap.ProseMirror .planet-token {
   background: #f6e7df;

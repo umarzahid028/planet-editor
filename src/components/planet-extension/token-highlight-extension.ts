@@ -4,15 +4,15 @@ import { Plugin, PluginKey } from "@/planet-core/pm/state"
 import { Decoration, DecorationSet } from "@/planet-core/pm/view"
 
 /**
- * Planet Token Highlight — renders document-variable tokens like `[text:1]`
- * (format `[type:id]`) as inline chips while editing.
+ * Planet Token Highlight — renders document-variable tokens like `{{airline}}`
+ * (format `{{key}}`) as inline chips while editing.
  *
  * Decoration-only: the token text stays plain in the document, so serialization
  * and resolution are unaffected — we merely wrap matches in a styled span
  * (`.planet-token`) that the consuming app can theme.
  */
 
-const TOKEN_RE = /\[[a-z]+:\d+\]/gi
+const TOKEN_RE = /\{\{\w+\}\}/g
 
 export const tokenHighlightKey = new PluginKey<DecorationSet>("planetTokenHighlight")
 
